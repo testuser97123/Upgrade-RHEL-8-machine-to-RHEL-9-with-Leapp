@@ -1,0 +1,11 @@
+## How to in-place upgrade an offline / disconnected RHEL 8 machine to RHEL 9 with Leapp? 
+
+## Environment
+
+ -   Red Hat Enterprise Linux 9.x
+ -   Red Hat Enterprise Linux 8.x
+ -   leapp
+
+## Resolution
+
+IMPORTANT: This process will NOT work with RHUI repositories (AWS, Azure, GCP)
