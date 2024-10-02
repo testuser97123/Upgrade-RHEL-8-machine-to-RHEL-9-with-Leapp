@@ -4,7 +4,7 @@
   vars: 
     pw: redhat 
   tasks: 
-  - name: Creating new user udaan if doesn't exist
+  - name: Creating new user sam if doesn't exist
     user: 
       name: sam
       home: /opt/udaan
