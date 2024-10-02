@@ -6,7 +6,7 @@
   tasks: 
 #  - name: Creating new user udaan if doesn't exist
 #    user: 
-#      name: udaan
+#      name: sam
 #      home: /opt/udaan
 #      generate_ssh_key: yes
 #      ssh_key_bits: 2048
@@ -30,7 +30,7 @@
 
   - name: Sudo Gaining Privilege to udaan user 
     copy: 
-      content: "udaan ALL=(ALL) NOPASSWD: ALL\n"
+      content: "sam ALL=(ALL) NOPASSWD: ALL\n"
       dest: /etc/sudoers.d/udaan 
 
   - name: Updating BaseOS yum configuration 
