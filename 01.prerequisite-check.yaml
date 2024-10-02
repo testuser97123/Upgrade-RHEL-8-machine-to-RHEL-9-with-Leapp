@@ -1,0 +1,68 @@
+---
+- name: Prerequisites validation rhel 8.10 
+  hosts: 192.168.1.161
+  vars: 
+    pw: redhat 
+  tasks: 
+#  - name: Creating new user udaan if doesn't exist
+#    user: 
+#      name: udaan
+#      home: /opt/udaan
+#      generate_ssh_key: yes
+#      ssh_key_bits: 2048
+#      ssh_key_file: .ssh/id_rsa
+#      password: "{{ pw | password_hash('sha512')}}"
+#      update_password: always
+#      state: present 
+
+
+  - name: Disabling Remote SSH 
+    replace: 
+      path: /etc/ssh/sshd_config
+      regexp: 'PermitRootLogin yes'
+      replace: 'PermitRootLogin no'
+
+  - name: Disabling Firewall Drifting 
+    replace: 
+      path: /etc/firewalld/firewalld.conf
+      regexp: 'AllowZoneDrifting=yes'
+      replace: 'AllowZoneDrifting=no'
+
+  - name: Sudo Gaining Privilege to udaan user 
+    copy: 
+      content: "udaan ALL=(ALL) NOPASSWD: ALL\n"
+      dest: /etc/sudoers.d/udaan 
+
+  - name: Updating BaseOS yum configuration 
+    ansible.builtin.yum_repository:
+      name: BaseOS
+      description: rhel-8.10-Base-Repository 
+      file: server 
+      baseurl: http://192.168.1.250:82/content/rhel8.10/BaseOS
+      gpgcheck: no
+      enabled: yes 
+  - name: Updating AppStream yum configuration 
+    ansible.builtin.yum_repository:
+      name: AppStream
+      description: rhel-8.10-App-Repository
+      file: server
+      baseurl: http://192.168.1.250:82/content/rhel8.10/AppStream 
+      gpgcheck: no 
+      enabled: yes 
+
+  - shell: yum repolist 
+    register: yum_out 
+  - name: show output yum repolist 
+    debug: var=yum_out 
+
+  - name: Restart service daemon 
+    service: 
+      name: "{{ item }}"
+      state: restarted
+      enabled: true
+    become: true 
+    loop: 
+      - firewalld
+      - sshd
+    tags: 
+      - svc

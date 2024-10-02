@@ -1,0 +1,42 @@
+---
+- name: Prerequisites validation rhel 8.10
+  hosts: 192.168.1.161
+  user: udaan
+  become: true
+  tasks:
+  - name: Installation Leapp Packages 
+    dnf: 
+      name: leapp-upgrade
+      state: latest 
+  
+  - name: Updating BaseOS yum configuration
+    ansible.builtin.yum_repository:
+      name: BaseOS
+      description: rhel-9.4-Base-Repository
+      file: server
+      baseurl: http://192.168.1.250:82/content/rhel9.3/x86_64/dvd/BaseOS
+      gpgcheck: no
+      enabled: yes
+  - name: Updating AppStream yum configuration
+    ansible.builtin.yum_repository:
+      name: AppStream
+      description: rhel-9.4-App-Repository
+      file: server
+      baseurl: http://192.168.1.250:82/content/rhel9.3/x86_64/dvd/AppStream/
+      gpgcheck: no
+      enabled: yes
+
+  - name: cleaning yum transaction packages
+    shell: dnf clean all 
+  - name: Preupgrade leapp 
+    shell: leapp preupgrade --no-rhsm --enablerepo BaseOS --enablerepo AppStream 
+    register: leapp_out 
+  - debug: 
+      var: leapp_out 
+
+  - name: Upgrade leapp 
+    shell: leapp upgrade --no-rhsm --enablerepo BaseOS --enablerepo AppStream 
+    register: leapp_upout 
+  - debug: 
+      var: leapp_upout 
+  - reboot: 
