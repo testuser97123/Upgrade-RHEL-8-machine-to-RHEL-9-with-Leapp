@@ -10,7 +10,7 @@
       key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
   - name: Set authorized key taken from file
     ansible.posix.authorized_key:
-      user: udaan
+      user: sam
       state: present
       key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
 
