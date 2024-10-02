@@ -1,7 +1,7 @@
 ---
 - name: Prerequisites validation rhel 8.10
   hosts: 192.168.1.161
-  user: udaan
+  user: sam
   become: true
   tasks:
   - name: Installation Leapp Packages 
